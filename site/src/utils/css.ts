@@ -28,11 +28,15 @@ export class DynamicCssService {
    *  - `.resume-header-image`: the optional profile photo (frontmatter `image`)
    *    rendered as a centered circle above the name.
    *  - centered section headers (`h2`).
+   *  - `.resume-company-logo`: an optional company logo (inline `<img>` placed at
+   *    the start of an experience entry) floated to the left of the entry so the
+   *    company/role and location/period rows sit beside it.
    */
   private staticExtras = (selector: string) => {
     return (
       `${selector} .resume-header-image { display: block; width: 7em; height: 7em; margin: 0 auto 0.6em; border-radius: 50%; object-fit: cover; }` +
-      `${selector} h2 { text-align: center; }`
+      `${selector} h2 { text-align: center; }` +
+      `${selector} .resume-company-logo { float: left; width: 2.9em; height: 2.9em; margin: 0.15em 0.7em 0.15em 0; object-fit: contain; }`
     );
   };
 

@@ -72,6 +72,20 @@ B.Eng. in Salad Engineering
 
 ## Experience
 
+<!--
+Optional: show a company logo beside an entry. Start the entry with an
+<img class="resume-company-logo"> (a public http(s) image URL), then stack two
+definition lists so the company/location and role/period rows sit beside the logo:
+
+<img class="resume-company-logo" src="https://your-host.com/logo.png">
+
+**Company Name**
+  ~ Location
+
+Role Title
+  ~ 01/2020 - Present
+-->
+
 **Cooking Engineer Intern**
   ~ Microwavesoft
   ~ 07/2021 - Present
