@@ -20,6 +20,8 @@ export const DEFAULT_STYLES = {
 
 export const DEFAULT_MD_CONTENT = `---
 name: Haha Ha
+# Optional: a circular profile photo above your name. Must be a public http(s) image URL.
+# image: https://avatars.githubusercontent.com/u/583231
 header:
   - text: |
       <span style="font-size: 1.2em; font-weight: bold;">Applying for: Cooking Engineer</span>

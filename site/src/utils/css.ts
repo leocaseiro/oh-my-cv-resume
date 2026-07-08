@@ -21,6 +21,21 @@ export class DynamicCssService {
     return `ohmycv-${type}-${id ?? RENDER.PREVIEW_ID}`;
   };
 
+  /**
+   * Static CSS that is not driven by a toolbar setting but should apply to
+   * every resume at render time (existing and new), so it does not depend on
+   * the per-resume CSS document:
+   *  - `.resume-header-image`: the optional profile photo (frontmatter `image`)
+   *    rendered as a centered circle above the name.
+   *  - centered section headers (`h2`).
+   */
+  private staticExtras = (selector: string) => {
+    return (
+      `${selector} .resume-header-image { display: block; width: 7em; height: 7em; margin: 0 auto 0.6em; border-radius: 50%; object-fit: cover; }` +
+      `${selector} h2 { text-align: center; }`
+    );
+  };
+
   private themeColor = (selector: string, styles: ResumeStyles) => {
     return (
       `${selector} :not(.resume-header-item) > a { color: ${styles.themeColor}; }` +
@@ -68,6 +83,7 @@ export class DynamicCssService {
     const selector = this._selector(id);
 
     const css =
+      this.staticExtras(selector) +
       this.fontFamily(selector, styles) +
       this.fontSize(selector, styles) +
       this.themeColor(selector, styles) +

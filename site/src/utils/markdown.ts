@@ -20,7 +20,25 @@ type ResumeHeaderItem = {
 
 type ResumeFrontMatter = {
   readonly name?: string;
+  readonly image?: string;
   readonly header?: Array<ResumeHeaderItem>;
+};
+
+/**
+ * Validate and sanitize a profile image URL. Only `http:`/`https:` URLs are
+ * allowed; the parsed `href` is returned so the value is safe to interpolate
+ * into the `src` attribute of the header `<img>`. Returns `null` when invalid.
+ */
+const resolveImageUrl = (image?: string): string | null => {
+  if (!image) return null;
+
+  try {
+    const url = new URL(image);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.href;
+  } catch {
+    return null;
+  }
 };
 
 type MarkdownItPlugins = Array<
@@ -101,7 +119,10 @@ export class MarkdownService {
   }
 
   public renderHeader(frontMatter: ResumeFrontMatter) {
+    const image = resolveImageUrl(frontMatter.image);
+
     const content = [
+      image ? `<img class="resume-header-image" src="${image}" alt="">\n` : "",
       frontMatter.name ? `<h1>${frontMatter.name}</h1>\n` : "",
       (frontMatter.header ?? [])
         .map((item, i, array) =>
