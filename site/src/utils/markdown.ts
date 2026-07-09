@@ -77,6 +77,17 @@ export class MarkdownService {
   }
 
   /**
+   * A line that contains nothing but an `<img>` tag (e.g. a company logo before
+   * an experience entry) is parsed by markdown-it as an HTML block, which then
+   * swallows the following lines — breaking the `~` definition list underneath.
+   * Ensure such a line is always followed by a blank line so the block ends and
+   * the definition list parses. No-op when a blank line is already present.
+   */
+  private _isolateStandaloneImages(md: string) {
+    return md.replace(/^([ \t]*<img\b[^>]*>[ \t]*)\n(?![ \t]*\n)/gim, "$1\n\n");
+  }
+
+  /**
    * Convert
    *
    *  <dt>...</dt>
@@ -137,7 +148,9 @@ export class MarkdownService {
   public renderResume(md: string) {
     const { body, frontMatter } = this._frontMatterParser.parse(md);
 
-    const content = this._resolveDeflist(this._renderMarkdown(body));
+    const content = this._resolveDeflist(
+      this._renderMarkdown(this._isolateStandaloneImages(body))
+    );
     const header = this.renderHeader(frontMatter);
 
     return header + content;
