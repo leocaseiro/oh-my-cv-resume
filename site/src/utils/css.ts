@@ -31,12 +31,16 @@ export class DynamicCssService {
    *  - `.resume-company-logo`: an optional company logo (inline `<img>` placed at
    *    the start of an experience entry) floated to the left of the entry so the
    *    company/role and location/period rows sit beside it.
+   *  - the header contact-item separator (`•`). Uses an extra `.resume-header`
+   *    in the selector so it wins over an older `content: " | "` rule that
+   *    existing resumes may still carry in their own CSS document.
    */
   private staticExtras = (selector: string) => {
     return (
       `${selector} .resume-header-image { display: block; width: 7em; height: 7em; margin: 0 auto 0.6em; border-radius: 50%; object-fit: cover; }` +
       `${selector} h2 { text-align: center; }` +
-      `${selector} .resume-company-logo { float: left; width: 2.9em; height: 2.9em; margin: 0.15em 0.7em 0.15em 0; object-fit: contain; }`
+      `${selector} .resume-company-logo { float: left; width: 2.5em; height: 2.5em; margin: 0.15em 0.7em 0.15em 0; object-fit: contain; }` +
+      `${selector} .resume-header .resume-header-item:not(.no-separator)::after { content: " • "; }`
     );
   };
 

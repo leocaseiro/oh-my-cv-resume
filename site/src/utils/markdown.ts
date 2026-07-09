@@ -145,15 +145,37 @@ export class MarkdownService {
     return `<div class="resume-header">${content}</div>`;
   }
 
+  /**
+   * A visible banner shown in place of the header when the front matter YAML
+   * fails to parse. Without it the header simply disappears with no explanation
+   * (a common cause: an unquoted value containing `: `, e.g. an inline
+   * `style="font-size: 1.2em"`, which must use a `|` block scalar or quotes).
+   * Styled inline so it is always visible regardless of the resume's CSS.
+   */
+  private _renderFrontMatterError(error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    return (
+      `<div class="resume-frontmatter-error" style="margin: 0 0 1em; padding: 0.6em 0.8em; ` +
+      `border: 1px solid #d33; border-radius: 4px; background: #fdeaea; color: #a11; ` +
+      `text-align: left; font-size: 0.85em; line-height: 1.4;">` +
+      `⚠️ The front matter (between the <code>---</code> lines) could not be parsed, so the ` +
+      `header is not shown. Check for a colon followed by a space in an unquoted value ` +
+      `(for example an inline <code>style="font-size: 1.2em"</code>) — wrap such a value with ` +
+      `<code>text: |</code> on its own line, or in quotes.<br><small>YAML error: ` +
+      `${message.replace(/</g, "&lt;")}</small></div>`
+    );
+  }
+
   public renderResume(md: string) {
-    const { body, frontMatter } = this._frontMatterParser.parse(md);
+    const { body, frontMatter, error } = this._frontMatterParser.parse(md);
 
     const content = this._resolveDeflist(
       this._renderMarkdown(this._isolateStandaloneImages(body))
     );
     const header = this.renderHeader(frontMatter);
+    const warning = error ? this._renderFrontMatterError(error) : "";
 
-    return header + content;
+    return warning + header + content;
   }
 }
 

@@ -34,6 +34,12 @@ export interface FrontMatterResults<T> {
    * Front matter string.
    */
   readonly frontMatterString?: string;
+
+  /**
+   * The error thrown while parsing the front matter YAML, when `errorBehavior`
+   * is not `"error"`. `undefined` when the front matter parsed successfully.
+   */
+  readonly error?: unknown;
 }
 
 export interface FrontMatterOptions {
@@ -117,7 +123,7 @@ export class FrontMatterParser<T = { [key: string]: any }> {
             ? this._lastFrontMatter
             : ({} as T);
 
-      return { ...split, frontMatter };
+      return { ...split, frontMatter, error: e };
     }
   }
 

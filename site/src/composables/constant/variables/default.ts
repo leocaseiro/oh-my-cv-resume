@@ -239,10 +239,6 @@ ${PREVIEW_SELECTOR} .resume-header h1 {
   margin-bottom: 8px;
 }
 
-${PREVIEW_SELECTOR} .resume-header-item:not(.no-separator)::after {
-  content: " | ";
-}
-
 /* Citations */
 
 ${PREVIEW_SELECTOR} [data-scope="cross-ref"][data-part="definitions"] {
