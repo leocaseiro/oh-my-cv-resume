@@ -129,11 +129,16 @@ export class MarkdownService {
     return item.newLine ? `<br>\n${element}` : element;
   }
 
+  /**
+   * The name and contact items are wrapped in a single `.resume-header-body`
+   * element so that, when a photo is present, the header can lay them out as
+   * one flex item beside it. Without the wrapper each `<h1>`/`<span>`/`<br>`
+   * would become its own flex item and spread across the row.
+   */
   public renderHeader(frontMatter: ResumeFrontMatter) {
     const image = resolveImageUrl(frontMatter.image);
 
-    const content = [
-      image ? `<img class="resume-header-image" src="${image}" alt="">\n` : "",
+    const body = [
       frontMatter.name ? `<h1>${frontMatter.name}</h1>\n` : "",
       (frontMatter.header ?? [])
         .map((item, i, array) =>
@@ -142,7 +147,15 @@ export class MarkdownService {
         .join("\n")
     ].join("");
 
-    return `<div class="resume-header">${content}</div>`;
+    const photo = image
+      ? `<img class="resume-header-image" src="${image}" alt="">\n`
+      : "";
+
+    return (
+      `<div class="resume-header${image ? " with-photo" : ""}">` +
+      `${photo}<div class="resume-header-body">${body}</div>` +
+      `</div>`
+    );
   }
 
   /**

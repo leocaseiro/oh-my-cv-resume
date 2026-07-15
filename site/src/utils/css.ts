@@ -26,7 +26,11 @@ export class DynamicCssService {
    * every resume at render time (existing and new), so it does not depend on
    * the per-resume CSS document:
    *  - `.resume-header-image`: the optional profile photo (frontmatter `image`)
-   *    rendered as a centered circle above the name.
+   *    rendered as a circle beside the name. The flex layout is scoped to
+   *    `.with-photo` (set only when the photo resolves) so headers without one
+   *    keep their centered layout. The extra `.resume-header-body` in the `h1`
+   *    selector is needed to out-specify the `text-align: center` rule existing
+   *    resumes carry in their own CSS document.
    *  - centered section headers (`h2`).
    *  - `.resume-company-logo`: an optional company logo (inline `<img>` placed at
    *    the start of an experience entry) floated to the left of the entry so the
@@ -37,7 +41,10 @@ export class DynamicCssService {
    */
   private staticExtras = (selector: string) => {
     return (
-      `${selector} .resume-header-image { display: block; width: 7em; height: 7em; margin: 0 auto 0.6em; border-radius: 50%; object-fit: cover; }` +
+      `${selector} .resume-header-image { width: 6em; height: 6em; flex-shrink: 0; border-radius: 50%; object-fit: cover; }` +
+      `${selector} .resume-header.with-photo { display: flex; align-items: center; gap: 0.9em; }` +
+      `${selector} .resume-header.with-photo .resume-header-body { flex: 1; text-align: left; }` +
+      `${selector} .resume-header.with-photo .resume-header-body h1 { text-align: left; margin-top: 0; }` +
       `${selector} h2 { text-align: center; }` +
       `${selector} .resume-company-logo { float: left; width: 2.5em; height: 2.5em; margin: 0.15em 0.7em 0.15em 0; object-fit: contain; }` +
       `${selector} .resume-header .resume-header-item:not(.no-separator)::after { content: " • "; }`
